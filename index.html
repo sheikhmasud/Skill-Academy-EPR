@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#123b35">
+<title>Skill Academy | Accounts Management System</title>
+<style>
+:root{
+  --navy:#123b35;--navy2:#1b554b;--teal:#16856f;--mint:#e8f5f0;
+  --bg:#f4f7f6;--card:#fff;--text:#1c2926;--muted:#71807b;
+  --line:#e3ebe7;--red:#c94b4b;--green:#17845f;--amber:#a86b12;
+  --shadow:0 8px 24px rgba(20,55,47,.07);--radius:16px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+.app{min-height:100vh;display:grid;grid-template-columns:250px 1fr}
+.sidebar{background:linear-gradient(180deg,var(--navy),#0d2d29);color:#fff;padding:25px 17px;display:flex;flex-direction:column;gap:25px}
+.brand{display:flex;gap:12px;align-items:center;padding:2px 8px}
+.logo{width:43px;height:43px;border-radius:13px;background:#d7f1e7;color:var(--navy);display:grid;place-items:center;font-weight:900;font-size:19px}
+.brand h1{font-size:17px;margin:0 0 4px;letter-spacing:.2px}
+.brand p{font-size:11px;margin:0;color:#b8d6ce}
+.nav-label{font-size:10px;color:#9bbdb3;text-transform:uppercase;letter-spacing:1.4px;padding:0 12px;margin-bottom:-12px}
+.nav{display:grid;gap:7px}
+.nav button{border:0;background:transparent;color:#d8e8e3;text-align:left;padding:12px 13px;border-radius:11px;cursor:pointer;font-weight:600;font-size:13px;display:flex;gap:11px;align-items:center}
+.nav button:hover,.nav button.active{background:#ffffff1b;color:#fff}
+.nav .ico{width:19px;text-align:center;font-size:16px}
+.side-foot{margin-top:auto;border-top:1px solid #ffffff25;padding:16px 9px 0;color:#b8d6ce;font-size:11px;line-height:1.7}
+.main{min-width:0}
+.topbar{height:74px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 30px;position:sticky;top:0;z-index:5}
+.topbar h2{font-size:18px;margin:0}
+.topbar .sub{font-size:11px;color:var(--muted);margin-top:4px}
+.top-actions{display:flex;gap:9px;align-items:center}
+.pill{border:1px solid var(--line);background:#fff;padding:8px 11px;border-radius:10px;color:var(--muted);font-size:12px}
+.avatar{width:35px;height:35px;border-radius:50%;background:var(--mint);color:var(--navy);display:grid;place-items:center;font-weight:800;font-size:12px}
+.content{padding:27px 30px 45px;max-width:1500px;margin:auto}
+.page{display:none}.page.active{display:block}
+.page-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;margin-bottom:20px}
+.page-head h3{font-size:21px;margin:0 0 6px}
+.page-head p{font-size:12px;color:var(--muted);margin:0}
+.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:700;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+.btn-primary{background:var(--teal);color:#fff}.btn-primary:hover{background:#116f5c}
+.btn-light{background:#fff;border:1px solid var(--line);color:var(--text)}
+.btn-danger{background:#fff0f0;color:var(--red);border:1px solid #f4dada}
+.btn-sm{padding:7px 9px;font-size:11px}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:20px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.stat-top{display:flex;justify-content:space-between;align-items:center}
+.stat-label{font-size:11px;color:var(--muted);font-weight:700}
+.stat-icon{width:34px;height:34px;border-radius:11px;background:var(--mint);display:grid;place-items:center;font-size:16px}
+.stat-value{font-size:24px;font-weight:800;margin:13px 0 5px;letter-spacing:-.5px}
+.stat-note{font-size:10px;color:var(--muted)}
+.green{color:var(--green)}.red{color:var(--red)}
+.grid-2{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;margin-bottom:18px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;min-width:0}
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:15px}
+.panel-head h4{margin:0;font-size:14px}
+.panel-head span{font-size:10px;color:var(--muted)}
+.chart{height:185px;display:flex;align-items:end;gap:12px;padding:10px 5px 0;border-bottom:1px solid var(--line)}
+.bar-group{flex:1;height:100%;display:flex;align-items:end;justify-content:center;gap:4px;position:relative}
+.bar{width: min(24px,38%);border-radius:6px 6px 0 0;min-height:2px}
+.bar.income{background:#32a984}.bar.expense{background:#ef9a75}
+.bar-label{position:absolute;bottom:-21px;font-size:9px;color:var(--muted)}
+.legend{display:flex;gap:15px;margin-top:30px;font-size:10px;color:var(--muted)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}
+.quick-list{display:grid;gap:10px}
+.quick-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);gap:10px}
+.quick-item:last-child{border:0}
+.q-left{display:flex;align-items:center;gap:10px;min-width:0}
+.q-icon{width:32px;height:32px;background:var(--mint);border-radius:10px;display:grid;place-items:center}
+.q-title{font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q-date{font-size:9px;color:var(--muted);margin-top:4px}
+.q-amount{font-size:11px;font-weight:800;white-space:nowrap}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:720px}
+th{background:#f7faf8;color:#66756f;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;padding:12px 13px;white-space:nowrap}
+td{padding:12px 13px;border-top:1px solid var(--line);font-size:11px;vertical-align:middle}
+tbody tr:hover{background:#fbfdfc}
+.type-tag{display:inline-block;padding:5px 8px;border-radius:20px;font-size:9px;font-weight:800}
+.type-income{background:#e5f6ef;color:#157452}.type-expense{background:#fff0eb;color:#b85839}
+.filters{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:13px}
+.field{display:grid;gap:6px}
+.field label{font-size:10px;font-weight:700;color:#53635d}
+.field input,.field select,.field textarea,.filters input,.filters select{width:100%;border:1px solid #dce6e1;border-radius:9px;padding:10px 11px;background:#fff;color:var(--text);outline:none;font-size:12px}
+.field input:focus,.field select:focus,.field textarea:focus,.filters input:focus,.filters select:focus{border-color:var(--teal);box-shadow:0 0 0 3px #16856f15}
+.filters input,.filters select{width:auto;min-width:140px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.form-grid .full{grid-column:1/-1}
+.form-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:17px}
+.modal-backdrop{position:fixed;inset:0;background:#10231f88;display:none;align-items:center;justify-content:center;padding:15px;z-index:20}
+.modal-backdrop.show{display:flex}
+.modal{background:#fff;border-radius:17px;width:min(650px,100%);max-height:92vh;overflow:auto;padding:22px;box-shadow:0 20px 70px #0003}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.modal-head h3{margin:0;font-size:17px}
+.close{border:0;background:#f1f5f3;width:31px;height:31px;border-radius:9px;cursor:pointer;font-size:18px}
+.empty{text-align:center;padding:35px 15px;color:var(--muted);font-size:12px}
+.report-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.report-box{background:#f8fbf9;border:1px solid var(--line);border-radius:12px;padding:15px}
+.report-box small{color:var(--muted);font-size:10px}.report-box strong{display:block;font-size:18px;margin-top:8px}
+.notice{background:#fff8e9;border:1px solid #f2e4c5;color:#77551b;padding:12px 14px;border-radius:10px;font-size:11px;line-height:1.6;margin-bottom:16px}
+.toast{position:fixed;bottom:20px;right:20px;background:#173e35;color:white;padding:12px 16px;border-radius:10px;font-size:12px;box-shadow:var(--shadow);opacity:0;transform:translateY(10px);transition:.2s;pointer-events:none;z-index:50}
+.toast.show{opacity:1;transform:translateY(0)}
+.footer{text-align:center;color:#96a49e;font-size:10px;padding:24px 0 5px}
+@media(max-width:1000px){.app{grid-template-columns:210px 1fr}.cards{grid-template-columns:repeat(2,1fr)}.grid-2{grid-template-columns:1fr}}
+@media(max-width:700px){.app{display:block}.sidebar{padding:12px;gap:12px}.brand{padding:3px 6px}.nav-label,.side-foot{display:none}.nav{display:flex;overflow:auto;gap:5px}.nav button{white-space:nowrap;padding:9px 11px;font-size:11px}.nav .ico{display:none}.topbar{height:60px;padding:0 15px}.topbar h2{font-size:15px}.top-actions .pill{display:none}.content{padding:18px 13px 30px}.cards{gap:9px}.stat{padding:13px}.stat-value{font-size:19px}.stat-label{font-size:10px}.page-head{align-items:center}.page-head h3{font-size:18px}.page-head p{font-size:10px}.report-cards{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:auto}.filters>*{flex:1}.filters input,.filters select{min-width:0;width:100%}}
+@media print{.sidebar,.topbar,.no-print,.footer{display:none!important}.app{display:block}.content{padding:0;max-width:none}.page{display:none!important}.page.active{display:block!important}.panel,.stat{box-shadow:none;break-inside:avoid}.table-wrap{overflow:visible}table{min-width:0}th,td{font-size:9px;padding:7px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">SA</div>
+      <div><h1>Skill Academy</h1><p>Accounts Management System</p></div>
+    </div>
+    <div class="nav-label">Workspace</div>
+    <nav class="nav">
+      <button class="active" data-page="dashboard"><span class="ico">▦</span> Dashboard</button>
+      <button data-page="transactions"><span class="ico">⇄</span> Transactions</button>
+      <button data-page="reports"><span class="ico">▤</span> Reports</button>
+      <button data-page="settings"><span class="ico">⚙</span> Settings & Backup</button>
+    </nav>
+    <div class="side-foot">Founder: <strong>Md. Masud Rana</strong><br>Version 1.0 · Data stored in this browser</div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div><h2 id="topTitle">Dashboard</h2><div class="sub">Welcome to Skill Academy Accounts</div></div>
+      <div class="top-actions"><span class="pill" id="todayLabel"></span><div class="avatar">MR</div></div>
+    </header>
+
+    <div class="content">
+      <section class="page active" id="dashboard">
+        <div class="page-head">
+          <div><h3>Financial Overview</h3><p>Monitor academy income, expenses and current balance.</p></div>
+          <button class="btn btn-primary no-print" onclick="openModal()">＋ Add Transaction</button>
+        </div>
+        <div class="cards">
+          <div class="stat"><div class="stat-top"><span class="stat-label">TOTAL INCOME</span><span class="stat-icon">↗</span></div><div class="stat-value green" id="totalIncome">৳0.00</div><div class="stat-note">All recorded income</div></div>
+          <div class="stat"><div class="stat-top"><span class="stat-label">TOTAL EXPENSE</span><span class="stat-icon">↘</span></div><div class="stat-value red" id="totalExpense">৳0.00</div><div class="stat-note">All recorded expenses</div></div>
+          <div class="stat"><div class="stat-top"><span class="stat-label">NET BALANCE</span><span class="stat-icon">৳</span></div><div class="stat-value" id="netBalance">৳0.00</div><div class="stat-note">Income minus expense</div></div>
+          <div class="stat"><div class="stat-top"><span class="stat-label">THIS MONTH</span><span class="stat-icon">▦</span></div><div class="stat-value" id="monthNet">৳0.00</div><div class="stat-note" id="monthCaption">Current month net</div></div>
+        </div>
+        <div class="grid-2">
+          <div class="panel">
+            <div class="panel-head"><h4>Monthly Cash Flow</h4><span>Last 6 months</span></div>
+            <div class="chart" id="cashChart"></div>
+            <div class="legend"><span><i class="dot" style="background:#32a984"></i>Income</span><span><i class="dot" style="background:#ef9a75"></i>Expense</span></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h4>Recent Transactions</h4><button class="btn btn-light btn-sm no-print" onclick="showPage('transactions')">View all →</button></div>
+            <div class="quick-list" id="recentList"></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h4>Account Activity</h4><span id="activityCount">0 records</span></div>
+          <div class="table-wrap"><table><thead><tr><th>Date</th><th>Details</th><th>Category</th><th>Type</th><th>Amount</th></tr></thead><tbody id="dashboardRows"></tbody></table></div>
+        </div>
+      </section>
+
+      <section class="page" id="transactions">
+        <div class="page-head">
+          <div><h3>Transactions</h3><p>Record and manage academy income and expenses.</p></div>
+          <button class="btn btn-primary no-print" onclick="openModal()">＋ Add Transaction</button>
+        </div>
+        <div class="panel">
+          <div class="filters no-print">
+            <input id="searchInput" placeholder="Search description or party..." oninput="renderTransactions()">
+            <select id="filterType" onchange="renderTransactions()"><option value="">All types</option><option value="Income">Income</option><option value="Expense">Expense</option></select>
+            <select id="filterMonth" onchange="renderTransactions()"><option value="">All months</option></select>
+            <button class="btn btn-light" onclick="resetFilters()">Reset</button>
+            <button class="btn btn-light" onclick="exportCSV()">↓ Export CSV</button>
+            <button class="btn btn-light" onclick="window.print()">⎙ Print</button>
+          </div>
+          <div class="table-wrap"><table><thead><tr><th>Date</th><th>Description / Party</th><th>Category</th><th>Payment</th><th>Type</th><th>Amount</th><th class="no-print">Actions</th></tr></thead><tbody id="transactionRows"></tbody></table></div>
+          <div id="transactionEmpty" class="empty" style="display:none">No transactions found. Click “Add Transaction” to record your first entry.</div>
+          <div style="display:flex;justify-content:space-between;gap:10px;padding-top:13px;color:var(--muted);font-size:10px"><span id="resultCount">0 transactions</span><strong id="filteredTotal">Total: ৳0.00</strong></div>
+        </div>
+      </section>
+
+      <section class="page" id="reports">
+        <div class="page-head"><div><h3>Financial Reports</h3><p>Review income and expense performance for a selected period.</p></div><button class="btn btn-light no-print" onclick="window.print()">⎙ Print Report</button></div>
+        <div class="panel">
+          <div class="filters no-print">
+            <div class="field"><label>From date</label><input type="date" id="reportFrom" onchange="renderReports()"></div>
+            <div class="field"><label>To date</label><input type="date" id="reportTo" onchange="renderReports()"></div>
+            <button class="btn btn-light" style="align-self:end" onclick="setReportMonth()">This month</button>
+            <button class="btn btn-light" style="align-self:end" onclick="clearReportDates()">All time</button>
+          </div>
+          <div class="report-cards">
+            <div class="report-box"><small>Income</small><strong class="green" id="reportIncome">৳0.00</strong></div>
+            <div class="report-box"><small>Expense</small><strong class="red" id="reportExpense">৳0.00</strong></div>
+            <div class="report-box"><small>Net result</small><strong id="reportNet">৳0.00</strong></div>
+          </div>
+          <div class="panel-head"><h4>Category Summary</h4><span id="reportPeriod">All recorded dates</span></div>
+          <div class="table-wrap"><table><thead><tr><th>Category</th><th>Type</th><th>Transactions</th><th>Total amount</th></tr></thead><tbody id="categoryRows"></tbody></table></div>
+        </div>
+      </section>
+
+      <section class="page" id="settings">
+        <div class="page-head"><div><h3>Settings & Backup</h3><p>Manage academy information and protect your records.</p></div></div>
+        <div class="notice"><strong>Important:</strong> This version saves records in the current browser on this device. Clearing browser data or changing devices may remove or hide your records. Download a backup regularly.</div>
+        <div class="grid-2">
+          <div class="panel">
+            <div class="panel-head"><h4>Academy Information</h4></div>
+            <div class="form-grid">
+              <div class="field full"><label>Institution name</label><input id="academyName" value="Skill Academy"></div>
+              <div class="field full"><label>System name</label><input id="systemName" value="Accounts Management System"></div>
+              <div class="field full"><label>Founder</label><input id="founderName" value="Md. Masud Rana"></div>
+              <div class="field full"><label>Currency</label><select id="currency"><option value="৳">BDT (৳)</option><option value="$">USD ($)</option><option value="₹">INR (₹)</option></select></div>
+            </div>
+            <div class="form-actions"><button class="btn btn-primary" onclick="saveSettings()">Save Settings</button></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h4>Data Backup & Restore</h4></div>
+            <p style="font-size:11px;color:var(--muted);line-height:1.7">Download a JSON backup of all transactions and settings. You can restore that file later in this browser or another device.</p>
+            <div style="display:grid;gap:10px;margin-top:17px">
+              <button class="btn btn-primary" onclick="backupData()">↓ Download Backup (JSON)</button>
+              <label class="btn btn-light" style="justify-content:center;cursor:pointer">↑ Restore Backup <input type="file" id="restoreFile" accept=".json,application/json" hidden onchange="restoreData(event)"></label>
+              <button class="btn btn-light" onclick="exportCSV()">↓ Export Transactions (CSV)</button>
+              <button class="btn btn-danger" onclick="clearAllData()">Delete All Transactions</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h4>Default Categories</h4><span>Used in the transaction form</span></div>
+          <div class="grid-2" style="margin:0">
+            <div><strong style="font-size:11px;color:var(--green)">Income</strong><p style="font-size:11px;line-height:2;color:var(--muted)">Student Fees · Admission Fees · Course Fees · Donations · Other Income</p></div>
+            <div><strong style="font-size:11px;color:var(--red)">Expense</strong><p style="font-size:11px;line-height:2;color:var(--muted)">Teacher Salary · Staff Salary · Office Rent · Utilities · Teaching Materials · Marketing · Transport · Other Expense</p></div>
+          </div>
+        </div>
+      </section>
+      <div class="footer">Skill Academy · Accounts Management System · Founder: Md. Masud Rana</div>
+    </div>
+  </main>
+</div>
+
+<div class="modal-backdrop" id="transactionModal">
+  <div class="modal">
+    <div class="modal-head"><h3 id="modalTitle">Add Transaction</h3><button class="close" onclick="closeModal()">×</button></div>
+    <form id="transactionForm" onsubmit="saveTransaction(event)">
+      <input type="hidden" id="editId">
+      <div class="form-grid">
+        <div class="field"><label for="entryDate">Date *</label><input type="date" id="entryDate" required></div>
+        <div class="field"><label for="entryType">Transaction type *</label><select id="entryType" required onchange="updateCategories()"><option value="Income">Income</option><option value="Expense">Expense</option></select></div>
+        <div class="field"><label for="entryCategory">Category *</label><select id="entryCategory" required></select></div>
+        <div class="field"><label for="entryAmount">Amount (৳) *</label><input type="number" id="entryAmount" min="0.01" step="0.01" placeholder="0.00" required></div>
+        <div class="field full"><label for="entryDescription">Description *</label><input id="entryDescription" maxlength="120" placeholder="e.g. November course fee" required></div>
+        <div class="field"><label for="entryParty">Student / Person / Party</label><input id="entryParty" maxlength="80" placeholder="Name (optional)"></div>
+        <div class="field"><label for="entryPayment">Payment method</label><select id="entryPayment"><option>Cash</option><option>Bank</option><option>bKash</option><option>Nagad</option><option>Rocket</option><option>Other</option></select></div>
+        <div class="field full"><label for="entryReference">Reference / Note</label><input id="entryReference" maxlength="120" placeholder="Receipt no. / remarks (optional)"></div>
+      </div>
+      <div class="form-actions"><button type="button" class="btn btn-light" onclick="closeModal()">Cancel</button><button type="submit" class="btn btn-primary">Save Transaction</button></div>
+    </form>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY='skillAcademyAccountsV1';
+const incomeCategories=['Student Fees','Admission Fees','Course Fees','Donations','Other Income'];
+const expenseCategories=['Teacher Salary','Staff Salary','Office Rent','Utilities','Teaching Materials','Marketing','Transport','Other Expense'];
+let transactions=[];
+let settings={academyName:'Skill Academy',systemName:'Accounts Management System',founderName:'Md. Masud Rana',currency:'৳'};
+
+const $=id=>document.getElementById(id);
+const money=n=>(settings.currency||'৳')+Number(n||0).toLocaleString('en-BD',{minimumFractionDigits:2,maximumFractionDigits:2});
+const todayISO=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function loadData(){
+  try{const saved=JSON.parse(localStorage.getItem(KEY)||'{}');transactions=Array.isArray(saved.transactions)?saved.transactions:[];settings={...settings,...(saved.settings||{})};}catch(e){transactions=[];}
+  $('academyName').value=settings.academyName;$('systemName').value=settings.systemName;$('founderName').value=settings.founderName;$('currency').value=settings.currency;
+}
+function persist(){localStorage.setItem(KEY,JSON.stringify({transactions,settings}));}
+function toast(msg){const el=$('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2300)}
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+  const names={dashboard:'Dashboard',transactions:'Transactions',reports:'Financial Reports',settings:'Settings & Backup'};
+  $('topTitle').textContent=names[id]||'Dashboard';
+  if(id==='transactions')renderTransactions();if(id==='reports')renderReports();
+}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+function sum(type,arr=transactions){return arr.filter(t=>t.type===type).reduce((a,t)=>a+Number(t.amount||0),0)}
+function monthKey(date){return String(date||'').slice(0,7)}
+function renderDashboard(){
+  const inc=sum('Income'),exp=sum('Expense'),net=inc-exp;
+  $('totalIncome').textContent=money(inc);$('totalExpense').textContent=money(exp);$('netBalance').textContent=money(net);
+  $('netBalance').className='stat-value '+(net>=0?'green':'red');
+  const now=todayISO().slice(0,7),thisMonth=transactions.filter(t=>monthKey(t.date)===now);
+  const mn=sum('Income',thisMonth)-sum('Expense',thisMonth);
+  $('monthNet').textContent=money(mn);$('monthNet').className='stat-value '+(mn>=0?'green':'red');
+  $('monthCaption').textContent=new Date().toLocaleDateString('en-US',{month:'long',year:'numeric'})+' net';
+  $('activityCount').textContent=transactions.length+' records';
+  const sorted=[...transactions].sort((a,b)=>(b.date||'').localeCompare(a.date||'')||(b.createdAt||0)-(a.createdAt||0));
+  $('dashboardRows').innerHTML=sorted.slice(0,7).map(t=>`<tr><td>${esc(t.date)}</td><td>${esc(t.description)}${t.party?`<br><span style="color:#89968f;font-size:9px">${esc(t.party)}</span>`:''}</td><td>${esc(t.category)}</td><td><span class="type-tag ${t.type==='Income'?'type-income':'type-expense'}">${t.type}</span></td><td class="${t.type==='Income'?'green':'red'}"><strong>${money(t.amount)}</strong></td></tr>`).join('')||'<tr><td colspan="5" class="empty">No transactions yet.</td></tr>';
+  $('recentList').innerHTML=sorted.slice(0,5).map(t=>`<div class="quick-item"><div class="q-left"><div class="q-icon">${t.type==='Income'?'↗':'↘'}</div><div style="min-width:0"><div class="q-title">${esc(t.description)}</div><div class="q-date">${esc(t.date)} · ${esc(t.category)}</div></div></div><div class="q-amount ${t.type==='Income'?'green':'red'}">${t.type==='Income'?'+':'−'}${money(t.amount)}</div></div>`).join('')||'<div class="empty">Your latest transactions will appear here.</div>';
+  renderChart();
+}
+function renderChart(){
+  const months=[];const d=new Date();for(let i=5;i>=0;i--){const x=new Date(d.getFullYear(),d.getMonth()-i,1);months.push({key:`${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}`,label:x.toLocaleDateString('en-US',{month:'short'})});}
+  const data=months.map(m=>{const a=transactions.filter(t=>monthKey(t.date)===m.key);return {...m,inc:sum('Income',a),exp:sum('Expense',a)}});
+  const max=Math.max(1,...data.flatMap(x=>[x.inc,x.exp]));
+  $('cashChart').innerHTML=data.map(m=>`<div class="bar-group"><div class="bar income" title="Income ${money(m.inc)}" style="height:${Math.max(m.inc?3:1,m.inc/max*145)}px"></div><div class="bar expense" title="Expense ${money(m.exp)}" style="height:${Math.max(m.exp?3:1,m.exp/max*145)}px"></div><span class="bar-label">${m.label}</span></div>`).join('');
+}
+function openModal(id=''){
+  $('transactionForm').reset();$('editId').value=id;$('entryDate').value=todayISO();$('entryType').value='Income';updateCategories();
+  if(id){const t=transactions.find(x=>x.id===id);if(!t)return;$('modalTitle').textContent='Edit Transaction';$('entryDate').value=t.date;$('entryType').value=t.type;updateCategories(t.category);$('entryCategory').value=t.category;$('entryAmount').value=t.amount;$('entryDescription').value=t.description;$('entryParty').value=t.party||'';$('entryPayment').value=t.payment||'Cash';$('entryReference').value=t.reference||'';}
+  else $('modalTitle').textContent='Add Transaction';
+  $('transactionModal').classList.add('show');
+}
+function closeModal(){$('transactionModal').classList.remove('show')}
+function updateCategories(selected=''){
+  const list=$('entryType').value==='Income'?incomeCategories:expenseCategories;
+  $('entryCategory').innerHTML=list.map(x=>`<option>${esc(x)}</option>`).join('');
+  if(selected&&list.includes(selected))$('entryCategory').value=selected;
+}
+function saveTransaction(e){
+  e.preventDefault();
+  const id=$('editId').value;
+  const item={id:id||('TXN-'+Date.now()+'-'+Math.random().toString(36).slice(2,6)),date:$('entryDate').value,type:$('entryType').value,category:$('entryCategory').value,amount:Number($('entryAmount').value),description:$('entryDescription').value.trim(),party:$('entryParty').value.trim(),payment:$('entryPayment').value,reference:$('entryReference').value.trim(),createdAt:Date.now()};
+  if(!item.date||!item.description||!Number.isFinite(item.amount)||item.amount<=0){toast('Please enter valid transaction details.');return}
+  if(id){const index=transactions.findIndex(t=>t.id===id);if(index>=0)transactions[index]=item}else transactions.push(item);
+  persist();closeModal();refreshAll();toast(id?'Transaction updated.':'Transaction saved.');
+}
+function getFiltered(){
+  const q=($('searchInput')?.value||'').toLowerCase(),type=$('filterType')?.value||'',month=$('filterMonth')?.value||'';
+  return [...transactions].filter(t=>(!q||[t.description,t.party,t.category,t.reference].join(' ').toLowerCase().includes(q))&&(!type||t.type===type)&&(!month||monthKey(t.date)===month)).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+}
+function renderMonthOptions(){
+  const sel=$('filterMonth'),old=sel.value;const months=[...new Set(transactions.map(t=>monthKey(t.date)).filter(Boolean))].sort().reverse();
+  sel.innerHTML='<option value="">All months</option>'+months.map(m=>`<option value="${m}">${new Date(m+'-02').toLocaleDateString('en-US',{month:'long',year:'numeric'})}</option>`).join('');
+  if(months.includes(old))sel.value=old;
+}
+function renderTransactions(){
+  renderMonthOptions();const list=getFiltered();
+  $('transactionRows').innerHTML=list.map(t=>`<tr><td>${esc(t.date)}</td><td><strong>${esc(t.description)}</strong>${t.party?`<br><span style="color:#89968f;font-size:9px">${esc(t.party)}</span>`:''}${t.reference?`<br><span style="color:#89968f;font-size:9px">Ref: ${esc(t.reference)}</span>`:''}</td><td>${esc(t.category)}</td><td>${esc(t.payment||'Cash')}</td><td><span class="type-tag ${t.type==='Income'?'type-income':'type-expense'}">${t.type}</span></td><td class="${t.type==='Income'?'green':'red'}"><strong>${money(t.amount)}</strong></td><td class="no-print"><button class="btn btn-light btn-sm" onclick="openModal('${t.id}')">Edit</button> <button class="btn btn-danger btn-sm" onclick="deleteTransaction('${t.id}')">Delete</button></td></tr>`).join('');
+  $('transactionEmpty').style.display=list.length?'none':'block';$('resultCount').textContent=list.length+' transactions';$('filteredTotal').textContent='Net: '+money(sum('Income',list)-sum('Expense',list));
+}
+function deleteTransaction(id){if(!confirm('Delete this transaction permanently?'))return;transactions=transactions.filter(t=>t.id!==id);persist();refreshAll();toast('Transaction deleted.')}
+function resetFilters(){$('searchInput').value='';$('filterType').value='';$('filterMonth').value='';renderTransactions()}
+function renderReports(){
+  const from=$('reportFrom').value,to=$('reportTo').value;
+  const list=transactions.filter(t=>(!from||t.date>=from)&&(!to||t.date<=to));
+  const inc=sum('Income',list),exp=sum('Expense',list),net=inc-exp;
+  $('reportIncome').textContent=money(inc);$('reportExpense').textContent=money(exp);$('reportNet').textContent=money(net);$('reportNet').className=net>=0?'green':'red';
+  $('reportPeriod').textContent=from||to?`${from||'Beginning'} to ${to||'Today'}`:'All recorded dates';
+  const groups={};list.forEach(t=>{const k=t.type+'|'+t.category;if(!groups[k])groups[k]={type:t.type,category:t.category,count:0,total:0};groups[k].count++;groups[k].total+=Number(t.amount)});
+  const rows=Object.values(groups).sort((a,b)=>a.type.localeCompare(b.type)||a.category.localeCompare(b.category));
+  $('categoryRows').innerHTML=rows.map(x=>`<tr><td>${esc(x.category)}</td><td><span class="type-tag ${x.type==='Income'?'type-income':'type-expense'}">${x.type}</span></td><td>${x.count}</td><td><strong class="${x.type==='Income'?'green':'red'}">${money(x.total)}</strong></td></tr>`).join('')||'<tr><td colspan="4" class="empty">No records for this period.</td></tr>';
+}
+function setReportMonth(){const d=new Date(),start=new Date(d.getFullYear(),d.getMonth(),1);$('reportFrom').value=`${start.getFullYear()}-${String(start.getMonth()+1).padStart(2,'0')}-01`;$('reportTo').value=todayISO();renderReports()}
+function clearReportDates(){$('reportFrom').value='';$('reportTo').value='';renderReports()}
+function csvCell(v){return '"'+String(v??'').replace(/"/g,'""')+'"'}
+function exportCSV(){
+  const rows=[['Date','Type','Category','Description','Party','Payment Method','Amount','Reference'],...transactions.map(t=>[t.date,t.type,t.category,t.description,t.party,t.payment,t.amount,t.reference])];
+  const csv='\uFEFF'+rows.map(r=>r.map(csvCell).join(',')).join('\r\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});downloadBlob(blob,'skill-academy-transactions-'+todayISO()+'.csv');toast('CSV export prepared.');
+}
+function downloadBlob(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url)}
+function backupData(){const blob=new Blob([JSON.stringify({app:'Skill Academy Accounts Management System',version:1,exportedAt:new Date().toISOString(),transactions,settings},null,2)],{type:'application/json'});downloadBlob(blob,'skill-academy-accounts-backup-'+todayISO()+'.json');toast('Backup downloaded.')}
+function restoreData(e){
+  const file=e.target.files[0];if(!file)return;const reader=new FileReader();
+  reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!Array.isArray(data.transactions))throw new Error('Invalid backup');if(!confirm('Restore this backup? Current records will be replaced.'))return;transactions=data.transactions;settings={...settings,...(data.settings||{})};persist();loadData();refreshAll();toast('Backup restored successfully.')}catch(err){alert('Could not restore this file. Please select a valid Skill Academy JSON backup.')}finally{e.target.value=''}};
+  reader.readAsText(file);
+}
+function saveSettings(){settings={academyName:$('academyName').value.trim()||'Skill Academy',systemName:$('systemName').value.trim()||'Accounts Management System',founderName:$('founderName').value.trim()||'Md. Masud Rana',currency:$('currency').value};persist();refreshAll();toast('Settings saved.')}
+function clearAllData(){if(!transactions.length){toast('There are no transactions to delete.');return}if(!confirm('Are you sure? This will permanently delete all transaction records in this browser. Download a backup first if needed.'))return;transactions=[];persist();refreshAll();toast('All transaction records deleted.')}
+function refreshAll(){renderDashboard();renderTransactions();renderReports()}
+$('todayLabel').textContent=new Date().toLocaleDateString('en-BD',{day:'2-digit',month:'short',year:'numeric'});
+$('transactionModal').addEventListener('click',e=>{if(e.target===$('transactionModal'))closeModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+loadData();updateCategories();refreshAll();
+</script>
+</body>
+</html>
